@@ -42,10 +42,7 @@ public class Favoris {
         this.lastname = lastname;
     }
     
-    public Favoris(User user, User userFavoris) {
-        this.user = user;
-        this.userFavoris = userFavoris;
-    }
+    
     
     public Favoris(User userFavoris) {
         this.user = user;
@@ -90,6 +87,8 @@ public class Favoris {
 
     @Override
     public String toString() {
-        return "Favoris{" + "user=" + user + ", userFavoris=" + userFavoris + '}';
+        return "Favoris{" + "firstname=" + firstname + ", lastname=" + lastname + '}';
     }
+
+    
 }

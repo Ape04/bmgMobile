@@ -1,5 +1,7 @@
 package com.codename1.uikit.cleanmodern;
 
+import bmg.crud.FavorisCrud;
+import bmg.entities.Favoris;
 import com.codename1.components.ScaleImageLabel;
 import com.codename1.components.SpanLabel;
 import com.codename1.components.ToastBar;
@@ -9,6 +11,8 @@ import com.codename1.io.NetworkManager;
 import com.codename1.ui.Button;
 import com.codename1.ui.ButtonGroup;
 import com.codename1.ui.Component;
+import static com.codename1.ui.Component.BOTTOM;
+import static com.codename1.ui.Component.CENTER;
 import com.codename1.ui.Container;
 import com.codename1.ui.Display;
 import com.codename1.ui.FontImage;
@@ -32,6 +36,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class NewsfeedForm extends BaseForm {
+    
+    
 
     public NewsfeedForm(Resources res) {
         super("Newsfeed", BoxLayout.y());
@@ -42,6 +48,13 @@ public class NewsfeedForm extends BaseForm {
         getContentPane().setScrollVisible(false);
         
         super.addSideMenu(res);
+        ConnectionRequest connectionRequest= new ConnectionRequest();
+        connectionRequest.setUrl("http://localhost/Codenameone/selectF.php?id_user=1");
+        NetworkManager.getInstance().addToQueue(connectionRequest);
+        connectionRequest.addResponseListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent ev) {
+                
         tb.addSearchCommand(e -> {});
         
         Tabs swipe = new Tabs();
@@ -89,37 +102,15 @@ public class NewsfeedForm extends BaseForm {
         Component.setSameSize(radioContainer, spacer1, spacer2);
         add(LayeredLayout.encloseIn(swipe, radioContainer));
         
-        ConnectionRequest con = new ConnectionRequest();
-            con.setUrl("http://localhost/codenameone/selectF.php?id_user=1");
-            con.addResponseListener(new ActionListener()
-    {
-
-        public void actionPerformed(ActionEvent ev)
-        {
-            try
-            {
-                NetworkEvent event = (NetworkEvent) ev;
-                byte[] data= (byte[]) event.getMetaData();
-                String s = new String(data,"UTF-8");
-                JSONObject obj = new JSONObject(s);
-                
-                JSONArray favoris = obj.getJSONArray("favoris");
-                for (int i = 0; i < favoris.length(); i++){
-                JSONObject object = favoris.getJSONObject(i);
-                String firstname = object.getString("firstname");
-                String lastname = object.getString("lastname");
-                
-                addButton(res.getImage("news-item-1.jpg"), firstname+" "+lastname, false, 26, 32);
+                FavorisCrud fc = new FavorisCrud();
+                    System.out.println(fc.getListT(new String(connectionRequest.getResponseData())));
+                for(Favoris f : fc.getListT(new String(connectionRequest.getResponseData()))){
+                    addButton(res.getImage("news-item-1.jpg"), f.getFirstname(), false, 26, 32);
+                    fc.getListT(new String(connectionRequest.getResponseData()));
                 }
-            
-            } catch (Exception ex)
-            {
-                ex.printStackTrace();
-            }
-        }
-
-    });
-            NetworkManager.getInstance().addToQueue(con);
+            }   
+            });
+        
     }
     
     private void addTab(Tabs swipe, Image img, Label spacer, String likesStr, String commentsStr, String text) {
@@ -191,7 +182,7 @@ public class NewsfeedForm extends BaseForm {
                        BoxLayout.encloseX(likes, comments)
                ));
        add(cnt);
-       image.addActionListener(e -> ToastBar.showMessage(title, FontImage.MATERIAL_INFO));
+       image.addActionListener(e -> new MsgForm());
        
    }
     

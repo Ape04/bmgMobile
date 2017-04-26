@@ -20,9 +20,6 @@ import org.json.JSONObject;
  */
 public class UserCrud {
 
-    
-    
-
     public void getUserCo(String username, String password) {
        
         ConnectionRequest con = new ConnectionRequest();

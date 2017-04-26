@@ -8,22 +8,24 @@ package bmg.crud;
 import bmg.entities.Favoris;
 import bmg.entities.User;
 import bmg.utils.Statics;
+import com.codename1.io.CharArrayReader;
 import com.codename1.io.ConnectionRequest;
 import com.codename1.io.JSONParser;
 import com.codename1.io.Log;
 import com.codename1.io.NetworkEvent;
 import com.codename1.io.NetworkManager;
 import com.codename1.ui.Form;
-import com.codename1.ui.List;
 import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.layouts.BorderLayout;
+import com.codename1.ui.util.Resources;
 import com.codename1.uikit.cleanmodern.AProduit;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -66,6 +68,7 @@ public class FavorisCrud {
             @Override
             protected void postResponse() {
                 //System.out.println(libs.size());
+                Resources res;
                 listOfFavoris = new Form();
                 com.codename1.ui.List uiLibsList = new com.codename1.ui.List();
                 ArrayList<String> libsNoms = new ArrayList<>();
@@ -92,6 +95,35 @@ public class FavorisCrud {
         connectionRequest.setUrl("http://localhost/Codenameone/selectF.php?id_user=1");
         NetworkManager.getInstance().addToQueue(connectionRequest);
         
+    }
+      
+      public ArrayList<Favoris> getListT(String json) {
+      
+        ArrayList <Favoris> listAct = new ArrayList<>();
+
+        try {
+
+            JSONParser j = new JSONParser();
+
+            Map<String, Object> actualite  = j.parseJSON(new CharArrayReader(json.toCharArray()));
+
+            List<Map<String, Object>> list = (List<Map<String, Object>>) actualite.get("favoris");
+
+            for (Map<String, Object> obj : list) {
+               Favoris a = new Favoris(obj.get("firstname").toString(), obj.get("lastname").toString());
+              
+
+                listAct.add(a);
+            }
+
+        } 
+         catch(IOException ex)
+         {
+             
+         }
+        
+        return listAct;
+
     }
 
 }

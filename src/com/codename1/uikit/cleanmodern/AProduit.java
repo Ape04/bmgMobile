@@ -23,7 +23,7 @@ import com.codename1.ui.layouts.GridLayout;
  *
  * @author crizby
  */
-public class AProduit extends Form {
+public class AProduit extends BaseForm {
     
     
     
@@ -32,9 +32,8 @@ public class AProduit extends Form {
     private final Container mainContainer;
     private final Button editBtn,backBtn;
     private Favoris currentProduit;
+    
     public AProduit(String nom,String nom_image){
-        
-        
         
         this.setLayout(new BorderLayout());
         mainContainer = new Container();
