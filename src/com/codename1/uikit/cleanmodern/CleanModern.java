@@ -65,7 +65,7 @@ public class CleanModern {
             current.show();
             return;
         }
-        new NewsfeedForm(theme).show();
+        new SignInForm(theme).show();
    
    /*UIBuilder ui = new UIBuilder();
         addBookBtn = new Button("Ajouter une propriete");

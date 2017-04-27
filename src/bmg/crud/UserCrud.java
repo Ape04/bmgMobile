@@ -5,12 +5,20 @@
  */
 package bmg.crud;
 
+import bmg.entities.Favoris;
+import bmg.entities.Message;
 import bmg.entities.User;
+import com.codename1.io.CharArrayReader;
 import com.codename1.io.ConnectionRequest;
+import com.codename1.io.JSONParser;
 import com.codename1.io.NetworkEvent;
 import com.codename1.io.NetworkManager;
 import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.events.ActionListener;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -20,31 +28,27 @@ import org.json.JSONObject;
  */
 public class UserCrud {
 
-    public void getUserCo(String username, String password) {
-       
-        ConnectionRequest con = new ConnectionRequest();
-        con.setUrl("http://localhost/codenameone/userCo.php?username=" + "\'" + username + "\'" + "&password=" + "\'" + password + "\'" + "");
+    public ArrayList<User> getUserCo(String json){
+        ArrayList <User> listusr = new ArrayList<>();
         
-        con.addResponseListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ev) {
-            
-                try {
-                    NetworkEvent event = (NetworkEvent) ev;
-                    byte[] data = (byte[]) event.getMetaData();
-                    String s = new String(data, "UTF-8");
-                    JSONObject obj = new JSONObject(s);
+        try {
 
-                    JSONObject u = obj.getJSONObject("utilisateur");
-                    int id = u.getInt("id");
-                    UserCo.userCo=id;
+            JSONParser j = new JSONParser();
+            Map<String, Object> actualite  = j.parseJSON(new CharArrayReader(json.toCharArray()));
+            List<Map<String, Object>> list = (List<Map<String, Object>>) actualite.get("utilisateur");
 
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
+            for (Map<String, Object> obj : list) {
+               User u = new User(Integer.parseInt(obj.get("id").toString()), 
+                       obj.get("nom").toString(), obj.get("prenom").toString(),obj.get("email").toString(),
+                       obj.get("username").toString(), obj.get("password").toString()
+               );
+               listusr.add(u);
             }
-
-        });
-        NetworkManager.getInstance().addToQueue(con);
-    }
+        } 
+         catch(IOException ex)
+         {
+         }
+        return listusr;
+}
+    
 }

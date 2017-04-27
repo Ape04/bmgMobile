@@ -5,11 +5,13 @@
  */
 package bmg.crud;
 
+import bmg.entities.User;
+
 /**
  *
  * @author Oussaa
  */
 public class UserCo {
-    public static int userCo;
+    public static User userCo;
     
 }

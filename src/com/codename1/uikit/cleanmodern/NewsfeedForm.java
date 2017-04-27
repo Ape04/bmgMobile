@@ -1,12 +1,11 @@
 package com.codename1.uikit.cleanmodern;
 
 import bmg.crud.FavorisCrud;
+import bmg.crud.UserCo;
 import bmg.entities.Favoris;
 import com.codename1.components.ScaleImageLabel;
 import com.codename1.components.SpanLabel;
-import com.codename1.components.ToastBar;
 import com.codename1.io.ConnectionRequest;
-import com.codename1.io.NetworkEvent;
 import com.codename1.io.NetworkManager;
 import com.codename1.ui.Button;
 import com.codename1.ui.ButtonGroup;
@@ -28,12 +27,9 @@ import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
-import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.util.Resources;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 public class NewsfeedForm extends BaseForm {
     
@@ -49,7 +45,7 @@ public class NewsfeedForm extends BaseForm {
         
         super.addSideMenu(res);
         ConnectionRequest connectionRequest= new ConnectionRequest();
-        connectionRequest.setUrl("http://localhost/Codenameone/selectF.php?id_user=1");
+        connectionRequest.setUrl("http://localhost/Codenameone/selectF.php?id_user="+UserCo.userCo.getId_u());
         NetworkManager.getInstance().addToQueue(connectionRequest);
         connectionRequest.addResponseListener(new ActionListener() {
 
@@ -105,8 +101,7 @@ public class NewsfeedForm extends BaseForm {
                 FavorisCrud fc = new FavorisCrud();
                     System.out.println(fc.getListT(new String(connectionRequest.getResponseData())));
                 for(Favoris f : fc.getListT(new String(connectionRequest.getResponseData()))){
-                    addButton(res.getImage("news-item-1.jpg"), f.getFirstname(), false, 26, 32);
-                    fc.getListT(new String(connectionRequest.getResponseData()));
+                    addButton(res.getImage("news-item-1.jpg"), f.getFirstname(), false, 26, 32, f.getIdu());
                 }
             }   
             });
@@ -151,7 +146,7 @@ public class NewsfeedForm extends BaseForm {
         swipe.addTab("", page1);
     }
     
-   private void addButton(Image img, String title, boolean liked, int likeCount, int commentCount) {
+   private void addButton(Image img, String title, boolean liked, int likeCount, int commentCount, int idu) {
        int height = Display.getInstance().convertToPixels(11.5f);
        int width = Display.getInstance().convertToPixels(14f);
        Button image = new Button(img.fill(width, height));
@@ -182,7 +177,7 @@ public class NewsfeedForm extends BaseForm {
                        BoxLayout.encloseX(likes, comments)
                ));
        add(cnt);
-       image.addActionListener(e -> new MsgForm());
+       image.addActionListener(e -> new MsgForm(idu));
        
    }
     

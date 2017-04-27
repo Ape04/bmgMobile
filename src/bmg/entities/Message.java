@@ -9,13 +9,27 @@ package bmg.entities;
 
 public class Message {
     
-    private int id_m;
+    private int id_m, author;
     private String contenu;
+    
     private User userEmetteur;
     private  User userRecepteur;
     private int reading;
     
     public Message() {
+    }
+
+    public int getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(int author) {
+        this.author = author;
+    }
+
+    public Message(int author, String contenu) {
+        this.author=author;
+        this.contenu = contenu;
     }
     
     public Message(int id_m, String contenu, User userEmetteur, User userRecepteur) {
@@ -94,7 +108,7 @@ public class Message {
 
     @Override
     public String toString() {
-        return "Message{" + "id_m=" + id_m + ", contenu=" + contenu + ", userEmetteur=" + userEmetteur + ", userRecepteur=" + userRecepteur +'}';
+        return "Message{" +"contenu=" + contenu +'}';
     }
 
     

@@ -21,12 +21,17 @@ package com.codename1.uikit.cleanmodern;
 
 import bmg.crud.UserCo;
 import bmg.crud.UserCrud;
+import bmg.entities.User;
 import com.codename1.components.FloatingHint;
+import com.codename1.io.ConnectionRequest;
+import com.codename1.io.NetworkManager;
 import com.codename1.ui.Button;
 import com.codename1.ui.Container;
 import com.codename1.ui.Display;
 import com.codename1.ui.Label;
 import com.codename1.ui.TextField;
+import com.codename1.ui.events.ActionEvent;
+import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
@@ -38,6 +43,8 @@ import com.codename1.ui.util.Resources;
  * @author Shai Almog
  */
 public class SignInForm extends BaseForm {
+    public TextField username;
+    public TextField password;
 
     public SignInForm(Resources res) {
         super(new BorderLayout());
@@ -52,8 +59,8 @@ public class SignInForm extends BaseForm {
         
         add(BorderLayout.NORTH, new Label(res.getImage("Logo.png"), "LogoLabel"));
         
-        TextField username = new TextField("", "Username", 20, TextField.ANY);
-        TextField password = new TextField("", "Password", 20, TextField.ANY);
+         username = new TextField("", "Username", 20, TextField.ANY);
+         password = new TextField("", "Password", 20, TextField.ANY);
         
         UserCrud uc = new UserCrud();
         
@@ -78,9 +85,32 @@ public class SignInForm extends BaseForm {
         add(BorderLayout.SOUTH, content);
         signIn.requestFocus();
         signIn.addActionListener(e -> {
-            uc.getUserCo(username.getText(), password.getText());
-            new NewsfeedForm(res).show();
-            System.out.println(UserCo.userCo);
+            
+            ConnectionRequest connectionRequest= new ConnectionRequest();
+        connectionRequest.setUrl("http://localhost/Codenameone/userCo.php?");
+        NetworkManager.getInstance().addToQueue(connectionRequest);
+        
+        connectionRequest.addResponseListener(new ActionListener() {
+            
+            public void actionPerformed(ActionEvent ev) {
+                
+                UserCrud uc = new UserCrud();
+                
+                 for(User u : uc.getUserCo(new String(connectionRequest.getResponseData()))){
+                     if(username.getText().equals(u.getLogin()) && password.getText().equals(u.getPassword()) ){
+                         User us = new User();
+                         us.setId_u(u.getId_u());
+                         us.setEmail(u.getEmail());
+                         us.setNom(u.getNom());
+                         us.setPrenom(u.getPrenom());
+                         us.setLogin(u.getLogin());
+                         us.setPassword(u.getPassword());
+                         UserCo.userCo = us;
+                     }
+                     new NewsfeedForm(res).show();
+                }
+        }
                 });
-    }
+    });
+}
 }

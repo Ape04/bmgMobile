@@ -10,10 +10,18 @@ package bmg.entities;
  * @author Oussaa
  */
 public class Favoris {
-    private int id_f;
+    private int id_f,idu;
     private User user;
     private User userFavoris;
     private String alias,firstname,lastname;
+
+    public int getIdu() {
+        return idu;
+    }
+
+    public void setIdu(int idu) {
+        this.idu = idu;
+    }
 
     public Favoris(int id_f, User user, User userFavoris) {
         this.id_f = id_f;
@@ -38,6 +46,13 @@ public class Favoris {
     }
     
     public Favoris( String firstname, String lastname) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+    }
+    
+    
+    public Favoris(int idu, String firstname, String lastname) {
+        this.idu=idu;
         this.firstname = firstname;
         this.lastname = lastname;
     }

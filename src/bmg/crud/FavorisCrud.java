@@ -110,9 +110,7 @@ public class FavorisCrud {
             List<Map<String, Object>> list = (List<Map<String, Object>>) actualite.get("favoris");
 
             for (Map<String, Object> obj : list) {
-               Favoris a = new Favoris(obj.get("firstname").toString(), obj.get("lastname").toString());
-              
-
+               Favoris a = new Favoris(Integer.parseInt(obj.get("id").toString()), obj.get("firstname").toString(), obj.get("lastname").toString());
                 listAct.add(a);
             }
 

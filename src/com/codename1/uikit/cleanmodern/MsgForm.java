@@ -5,8 +5,12 @@
  */
 package com.codename1.uikit.cleanmodern;
 
+import bmg.crud.MsgCrud;
+import bmg.entities.Message;
 import com.codename1.capture.Capture;
 import com.codename1.components.SpanLabel;
+import com.codename1.io.ConnectionRequest;
+import com.codename1.io.NetworkManager;
 import com.codename1.system.NativeLookup;
 import com.codename1.ui.Button;
 import com.codename1.ui.Component;
@@ -19,6 +23,7 @@ import com.codename1.ui.Graphics;
 import com.codename1.ui.Image;
 import com.codename1.ui.TextField;
 import com.codename1.ui.Toolbar;
+import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.events.DataChangedListener;
 import com.codename1.ui.layouts.BorderLayout;
@@ -38,16 +43,17 @@ public class MsgForm {
     private TTS tts;
     private Resources theme;
     
-    public MsgForm(){
-        theme = UIManager.initFirstTheme("/theme");
+    public MsgForm(int idu){
+        theme = UIManager.initFirstTheme("/themeMsg");
 
         // Enable Toolbar on all Forms by default
         Toolbar.setGlobalToolbar(true);
         userPicture = theme.getImage("duke_iphone.png");
         tts = (TTS)NativeLookup.create(TTS.class);
         
-        showSbaitso();
+        showSbaitso(idu);
     }
+    
     
         private DataChangedListener createSearchListener(final TextField searchField, final Container discussion, final Button ask) {
         return (type, index) -> {
@@ -87,7 +93,8 @@ public class MsgForm {
         }
     }
     
-    void showSbaitso() {
+    void showSbaitso(int id) {
+        
         Form sb = new Form(new BorderLayout());
         sb.setFormBottomPaddingEditingMode(true);
         Toolbar t = sb.getToolbar();
@@ -105,16 +112,36 @@ public class MsgForm {
 
         sb.show();
         Display.getInstance().callSerially(() -> {
-            String w = "HELLO " + userName +", MY NAME IS DOCTOR SBAITSO.\n\nI AM HERE TO HELP YOU.\n" +
-                    "SAY WHATEVER IS IN YOUR MIND FREELY," +
-                    "OUR CONVERSATION WILL BE KEPT IN STRICT CONFIDENCE.\n" +
-                    "MEMORY CONTENTS WILL BE WIPED OFF AFTER YOU LEAVE.";
-            say(discussion, w, false);
-            if(tts != null && tts.isSupported()) {
-                tts.say(w);
+            MsgCrud mc = new MsgCrud();
+            ConnectionRequest connectionRequestSelect= new ConnectionRequest();
+            connectionRequestSelect.setUrl("http://localhost/Codenameone/SelectM?idco="+"1"+"&idr="+id+"");
+            
+            NetworkManager.getInstance().addToQueue(connectionRequestSelect);
+            connectionRequestSelect.addResponseListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent ev) {
+                
+            for(Message m : mc.getListT(new String(connectionRequestSelect.getResponseData()))){
+                
+                if(m.getAuthor()==id){
+                say(discussion, m.getContenu(), false);}
+                else say(discussion, m.getContenu(), true);
+                
+                if(tts != null && tts.isSupported()) {
+                tts.say(m.getContenu());
             }
+                }
+            }});
+            
         });
+        
         searchField.addDataChangeListener(createSearchListener(searchField, discussion, askButton));
+        askButton.addActionListener(e->{
+            ConnectionRequest connectionRequest= new ConnectionRequest();
+            connectionRequest.setUrl("http://localhost/Codenameone/insertMsg?author='"+"1'"+"&addressee='"+id+"'&txt='"+ask.getText()+"'");
+            NetworkManager.getInstance().addToQueue(connectionRequest);
+        });
+        
         ActionListener askEvent = (e) -> {
             String t1 = ask.getText();
             if (t1.length() > 0) {
@@ -145,7 +172,6 @@ public class MsgForm {
             t.setY(Display.getInstance().getDisplayHeight());
             t.setTextUIID("BubbleUser");
             t.setIconPosition(BorderLayout.EAST);
-            t.setIcon(userPicture);
             t.setTextBlockAlign(Component.RIGHT);
         } else {
             t.setY(0);
@@ -156,41 +182,4 @@ public class MsgForm {
         destination.animateLayoutAndWait(400);
         destination.scrollComponentToVisible(t);
     }
-    
-    private Image roundImage(Image img) {
-        int width = img.getWidth();
-        Image roundMask = Image.createImage(width, width, 0xff000000);
-        Graphics gr = roundMask.getGraphics();
-        gr.setColor(0xffffff);
-        gr.fillArc(0, 0, width, width, 0, 360);
-        Object mask = roundMask.createMask();
-        img = img.applyMask(mask);
-        return img;
-    }
-    
-    private Image captureRoundImage() {
-        try {
-            int width = userPicture.getWidth();
-            String result = Capture.capturePhoto(width, -1);
-            if(result == null) {
-                return userPicture;
-            }
-            Image capturedImage = Image.createImage(result);
-            if(capturedImage.getHeight() != width) {
-                if(capturedImage.getWidth() < capturedImage.getHeight()) {
-                    capturedImage = capturedImage.subImage(0, capturedImage.getHeight() / 2 - width / 2, width, width, false);
-                } else {
-                    Image n = Image.createImage(width, width);
-                    n.getGraphics().drawImage(capturedImage, 0, width / 2- capturedImage.getHeight() / 2);
-                    capturedImage = n;
-                }
-            }
-            return roundImage(capturedImage);
-        } catch (IOException err) {
-            err.printStackTrace();
-            return userPicture;
-        }
-    }
-    
-    
 }

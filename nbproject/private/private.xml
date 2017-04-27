@@ -4,12 +4,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Oussaa/Documents/NetBeansProjects/Demo/src/com/codename1/uikit/cleanmodern/SignInForm.java</file>
-            <file>file:/C:/Users/Oussaa/Documents/NetBeansProjects/Demo/src/bmg/entities/Favoris.java</file>
             <file>file:/C:/Users/Oussaa/Documents/NetBeansProjects/Demo/src/com/codename1/uikit/cleanmodern/NewsfeedForm.java</file>
-            <file>file:/C:/Users/Oussaa/Documents/NetBeansProjects/Demo/src/com/codename1/uikit/cleanmodern/AProduit.java</file>
+            <file>file:/C:/Users/Oussaa/Documents/NetBeansProjects/Demo/src/bmg/crud/MsgCrud.java</file>
+            <file>file:/C:/Users/Oussaa/Documents/NetBeansProjects/Demo/src/com/codename1/uikit/cleanmodern/MsgForm.java</file>
+            <file>file:/C:/Users/Oussaa/Documents/NetBeansProjects/Demo/src/com/codename1/uikit/cleanmodern/AI.java</file>
             <file>file:/C:/Users/Oussaa/Documents/NetBeansProjects/Demo/src/bmg/crud/FavorisCrud.java</file>
-            <file>file:/C:/Users/Oussaa/Documents/NetBeansProjects/Demo/src/bmg/crud/UserCrud.java</file>
+            <file>file:/C:/Users/Oussaa/Documents/NetBeansProjects/Demo/src/bmg/entities/Message.java</file>
+            <file>file:/C:/Users/Oussaa/Documents/NetBeansProjects/Demo/src/com/codename1/uikit/cleanmodern/TTS.java</file>
         </group>
     </open-files>
 </project-private>
