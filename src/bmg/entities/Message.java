@@ -27,7 +27,8 @@ public class Message {
         this.author = author;
     }
 
-    public Message(int author, String contenu) {
+    public Message(int id_m, int author, String contenu) {
+        this.id_m = id_m;
         this.author=author;
         this.contenu = contenu;
     }

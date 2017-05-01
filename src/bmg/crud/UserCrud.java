@@ -40,7 +40,7 @@ public class UserCrud {
             for (Map<String, Object> obj : list) {
                User u = new User(Integer.parseInt(obj.get("id").toString()), 
                        obj.get("nom").toString(), obj.get("prenom").toString(),obj.get("email").toString(),
-                       obj.get("username").toString(), obj.get("password").toString()
+                       obj.get("username").toString(), obj.get("password").toString(), obj.get("numtel").toString()
                );
                listusr.add(u);
             }

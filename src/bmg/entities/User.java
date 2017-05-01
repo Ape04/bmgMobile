@@ -32,13 +32,14 @@ public class User {
         this.prenom=prenom;
     }
 
-        public User(int id_u, String nom, String prenom, String email, String login, String password) {
+        public User(int id_u, String nom, String prenom, String email, String login, String password, String numtel) {
         this.id_u = id_u;
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
         this.login = login;
         this.password = password;
+        this.numtel=numtel;
     }
         
     public User(int id_u, String nom, String prenom, String email, String login, String password, String role,String imageurl,String sexe,String daten, String numtel ) {

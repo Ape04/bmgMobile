@@ -30,7 +30,7 @@ public class MsgCrud {
             List<Map<String, Object>> list = (List<Map<String, Object>>) actualite.get("msg");
 
             for (Map<String, Object> obj : list) {
-               Message a = new Message(Integer.parseInt(obj.get("author").toString()), obj.get("txt").toString());
+               Message a = new Message(Integer.parseInt(obj.get("id").toString()), Integer.parseInt(obj.get("author").toString()), obj.get("txt").toString());
                 listMsg.add(a);
             }
         } 

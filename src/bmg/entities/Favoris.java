@@ -51,10 +51,11 @@ public class Favoris {
     }
     
     
-    public Favoris(int idu, String firstname, String lastname) {
+    public Favoris(int idu, String firstname, String lastname, String alias) {
         this.idu=idu;
         this.firstname = firstname;
         this.lastname = lastname;
+        this.alias=alias;
     }
     
     

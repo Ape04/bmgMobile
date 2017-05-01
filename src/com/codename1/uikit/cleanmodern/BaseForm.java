@@ -67,10 +67,9 @@ public class BaseForm extends Form {
         tb.addMaterialCommandToSideMenu("Profile", FontImage.MATERIAL_SETTINGS, e -> new ProfileForm(res).show());
         tb.addMaterialCommandToSideMenu("Newsfeed", FontImage.MATERIAL_UPDATE, e -> new NewsfeedForm(res).show());
         tb.addMaterialCommandToSideMenu("Favourite", FontImage.MATERIAL_UPDATE, e -> new NewsfeedForm(res).show());
-        tb.addMaterialCommandToSideMenu("My Properties", FontImage.MATERIAL_UPDATE, e -> new NewsfeedForm(res).show());
+        tb.addMaterialCommandToSideMenu("My Properties", FontImage.MATERIAL_UPDATE, e -> new AccueilForm(res).show());
         tb.addMaterialCommandToSideMenu("Reservation List", FontImage.MATERIAL_UPDATE, e -> new NewsfeedForm(res).show());
         tb.addMaterialCommandToSideMenu("Manage Reservation", FontImage.MATERIAL_UPDATE, e -> new NewsfeedForm(res).show());
-
 
         tb.addMaterialCommandToSideMenu("Logout", FontImage.MATERIAL_EXIT_TO_APP, e -> new SignInForm(res).show());
     }

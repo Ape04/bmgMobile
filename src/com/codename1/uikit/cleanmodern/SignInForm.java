@@ -16,7 +16,6 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE 
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
  */
-
 package com.codename1.uikit.cleanmodern;
 
 import bmg.crud.UserCo;
@@ -43,36 +42,37 @@ import com.codename1.ui.util.Resources;
  * @author Shai Almog
  */
 public class SignInForm extends BaseForm {
+
     public TextField username;
     public TextField password;
 
     public SignInForm(Resources res) {
         super(new BorderLayout());
-        
-        if(!Display.getInstance().isTablet()) {
-            BorderLayout bl = (BorderLayout)getLayout();
+
+        if (!Display.getInstance().isTablet()) {
+            BorderLayout bl = (BorderLayout) getLayout();
             bl.defineLandscapeSwap(BorderLayout.NORTH, BorderLayout.EAST);
             bl.defineLandscapeSwap(BorderLayout.SOUTH, BorderLayout.CENTER);
         }
         getTitleArea().setUIID("Container");
         setUIID("SignIn");
-        
+
         add(BorderLayout.NORTH, new Label(res.getImage("Logo.png"), "LogoLabel"));
-        
-         username = new TextField("", "Username", 20, TextField.ANY);
-         password = new TextField("", "Password", 20, TextField.ANY);
-        
+
+        username = new TextField("", "Username", 20, TextField.ANY);
+        password = new TextField("", "Password", 20, TextField.ANY);
+
         UserCrud uc = new UserCrud();
-        
+
         username.setSingleLineTextArea(false);
         password.setSingleLineTextArea(false);
         Button signIn = new Button("Sign In");
         Button signUp = new Button("Sign Up");
-        
+
         signUp.addActionListener(e -> new SignUpForm(res).show());
         signUp.setUIID("Link");
         Label doneHaveAnAccount = new Label("Don't have an account?");
-        
+
         Container content = BoxLayout.encloseY(
                 new FloatingHint(username),
                 createLineSeparator(),
@@ -85,32 +85,31 @@ public class SignInForm extends BaseForm {
         add(BorderLayout.SOUTH, content);
         signIn.requestFocus();
         signIn.addActionListener(e -> {
-            
-            ConnectionRequest connectionRequest= new ConnectionRequest();
-        connectionRequest.setUrl("http://localhost/Codenameone/userCo.php?");
-        NetworkManager.getInstance().addToQueue(connectionRequest);
-        
-        connectionRequest.addResponseListener(new ActionListener() {
-            
-            public void actionPerformed(ActionEvent ev) {
-                
-                UserCrud uc = new UserCrud();
-                
-                 for(User u : uc.getUserCo(new String(connectionRequest.getResponseData()))){
-                     if(username.getText().equals(u.getLogin()) && password.getText().equals(u.getPassword()) ){
-                         User us = new User();
-                         us.setId_u(u.getId_u());
-                         us.setEmail(u.getEmail());
-                         us.setNom(u.getNom());
-                         us.setPrenom(u.getPrenom());
-                         us.setLogin(u.getLogin());
-                         us.setPassword(u.getPassword());
-                         UserCo.userCo = us;
-                     }
-                     new NewsfeedForm(res).show();
+
+            ConnectionRequest connectionRequest = new ConnectionRequest();
+            connectionRequest.setUrl("http://localhost/Codenameone/userCo.php?");
+            NetworkManager.getInstance().addToQueue(connectionRequest);
+
+            connectionRequest.addResponseListener(new ActionListener() {
+
+                public void actionPerformed(ActionEvent ev) {
+                    UserCrud uc = new UserCrud();
+
+                    for (User u : uc.getUserCo(new String(connectionRequest.getResponseData()))) {
+                        if (username.getText().equals(u.getLogin()) && password.getText().equals(u.getPassword())) {
+                            User us = new User();
+                            us.setId_u(u.getId_u());
+                            us.setEmail(u.getEmail());
+                            us.setNom(u.getNom());
+                            us.setPrenom(u.getPrenom());
+                            us.setLogin(u.getLogin());
+                            us.setPassword(u.getPassword());
+                            UserCo.userCo = us;
+                        }
+                        new NewsfeedForm(res).show();
+                    }
                 }
-        }
-                });
-    });
-}
+            });
+        });
+    }
 }
